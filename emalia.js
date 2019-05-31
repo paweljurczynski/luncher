@@ -25,12 +25,12 @@ async function log() {
         );
     }, currentDay, nextDay, days);
 
-    console.log(`
+    await browser.close();
+
+    return `
         **EMALIA**
         ${menu}
-    `);
-
-    await browser.close();
+    `;
 }
 
 module.exports = {log};

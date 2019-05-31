@@ -19,12 +19,11 @@ async function log() {
         return lunchPost && lunchPost.textContent || 'Food not found. Stay hungry!';
     });
 
-    console.log(`
+    await browser.close();
+    `
         **OGRÓD**
         ${menu}
-    `);
-
-    await browser.close();
+    `
 };
 
 module.exports = {log};

@@ -19,12 +19,12 @@ async function log() {
         return lunchPost && lunchPost.textContent || 'Food not found. Stay hungry!';
     });
 
-    console.log(`
+    await browser.close();
+
+    return `
         **SZUWARY CAFE**
         ${menu}
-    `);
-
-    await browser.close();
+    `
 };
 
 module.exports = {log};
