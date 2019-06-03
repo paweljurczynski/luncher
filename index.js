@@ -5,8 +5,8 @@ const port = 3000;
 app.get('/', async (req, res) => {
     const restaurants = [
         require('./emalia'),
-        require('./ogrod'),
-        require('./szuwary'),
+        // require('./ogrod'),
+        // require('./szuwary'),
     ];
 
     const menu = await Promise.all([...restaurants.map(restaurant => restaurant.log())])
@@ -15,4 +15,4 @@ app.get('/', async (req, res) => {
 
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
