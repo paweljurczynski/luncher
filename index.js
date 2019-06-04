@@ -1,18 +1,18 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 80;
+const serviceId = process.env.SERVICE_ID;
 const moment = require("moment-timezone");
+const axios = require('axios');
+const cron = require('node-cron');
+
 require("moment/locale/pl");
 
-const format = 'HH:mm';
 const timezone = 'Europe/Warsaw';
-const startTime = '09:30:00';
-const endTime = '12:00:00';
-const intervalTime = 15 * 60 * 1000;
 
 moment.tz.setDefault(timezone);
 
-let cache = {};
+const cache = {};
 
 async function writeCache() {
     const restaurants = [
@@ -29,15 +29,33 @@ async function writeCache() {
     console.log('Writing cache at: ' + cache.time);
 }
 
-setInterval(async () => {
-    const shouldWriteCache = moment().isBetween(moment(startTime, format), moment(endTime, format));
+function toSlackPost(item) {
+    return `*${item.restaurant}*\n${item.content}`;
+}
 
-    if (shouldWriteCache) {
-        await writeCache();
-    }
-}, intervalTime);
+async function sendSlackMessage() {
+    const url = `https://hooks.slack.com/services/${serviceId}`;
+    const content = cache.posts.map(toSlackPost).join('\n\n');
 
-writeCache();
+    await axios.post(url, {text: content});
+
+    console.log('Send message to slack!');
+}
+
+console.log('registering cron');
+
+// cron.schedule('0 24 13 * * *', async () => {
+//     console.log('Cron running...');
+//     await writeCache();
+//     await sendSlackMessage()
+// }, {
+//     timezone
+// });
+
+cron.schedule('47 17 * * 1-5', () => console.log('dupa'), {
+    scheduled: true,
+    timezone: 'Europe/Warsaw'
+});
 
 app.get('/', async (req, res) => {
     res.json(cache);
