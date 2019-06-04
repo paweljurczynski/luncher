@@ -4,7 +4,7 @@ const port = process.env.PORT || 80;
 const serviceId = process.env.SERVICE_ID;
 const moment = require("moment-timezone");
 const axios = require('axios');
-const cron = require('node-cron');
+const { CronJob } = require('cron');
 
 require("moment/locale/pl");
 
@@ -42,7 +42,7 @@ async function sendSlackMessage() {
     console.log('Send message to slack!');
 }
 
-console.log('registering cron');
+console.log('registering cron', serviceId);
 
 // cron.schedule('0 24 13 * * *', async () => {
 //     console.log('Cron running...');
@@ -52,10 +52,14 @@ console.log('registering cron');
 //     timezone
 // });
 
-cron.schedule('47 17 * * 1-5', () => console.log('dupa'), {
-    scheduled: true,
-    timezone: 'Europe/Warsaw'
-});
+// cron.schedule('', () => console.log('dupa'), {
+//     scheduled: true,
+//     timezone: 'Europe/Warsaw'
+// });
+
+new CronJob('55 17 * * 0-6', function() {
+    console.log('You will see this message every second');
+}, null, true, timezone);
 
 app.get('/', async (req, res) => {
     res.json(cache);
