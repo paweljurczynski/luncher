@@ -1,6 +1,10 @@
 const puppeteer = require("puppeteer");
 
+const restaurant = 'Szuwary';
+
 async function log() {
+    console.log(`Requesting ${restaurant}...`);
+
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto("https://www.facebook.com/pg/SzuwaryCafe/posts/");
@@ -20,11 +24,10 @@ async function log() {
     });
 
     await browser.close();
-
-    return `
-        **SZUWARY CAFE**
-        ${menu}
-    `
+    return {
+        restaurant,
+        content: menu
+    }
 };
 
 module.exports = {log};

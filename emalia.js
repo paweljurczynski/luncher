@@ -2,7 +2,11 @@ const puppeteer = require("puppeteer");
 const moment = require("moment");
 require("moment/locale/pl");
 
+const restaurant = 'Emalia';
+
 async function log() {
+    console.log(`Requesting ${restaurant}...`);
+
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto("https://www.facebook.com/pg/Emaliazablocie/posts/");
@@ -27,10 +31,10 @@ async function log() {
 
     await browser.close();
 
-    return `
-        **EMALIA**
-        ${menu}
-    `;
+    return {
+        restaurant,
+        content: menu
+    }
 }
 
 module.exports = {log};
