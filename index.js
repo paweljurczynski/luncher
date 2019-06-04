@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3000;
+const port = process.env.PORT || 80;
 
 app.get('/', async (req, res) => {
     const restaurants = [
