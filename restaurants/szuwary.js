@@ -14,7 +14,7 @@ async function log() {
     const page = await browser.newPage();
     await page.goto("https://www.facebook.com/pg/SzuwaryCafe/posts/");
 
-    const menu = await page.evaluate(() => {
+    const content = await page.evaluate(() => {
         const lunchPost = Array.from(document.querySelectorAll('[data-testid="post_message"]')).find(
             post => {
                 const header = post.previousElementSibling;
@@ -25,13 +25,20 @@ async function log() {
             }
         );
 
-        return lunchPost && lunchPost.textContent || 'Food not found. Stay hungry!';
+        const header = lunchPost.previousElementSibling;
+        const time = header.querySelector('[data-utime]').getAttribute('data-utime');
+
+        return {
+            time,
+            post: lunchPost && lunchPost.textContent || 'Food not found. Stay hungry!'
+        }
     });
 
     await browser.close();
+
     return {
         restaurant,
-        content: menu
+        content
     }
 };
 
