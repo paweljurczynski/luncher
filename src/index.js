@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT || 80;
 const serviceId = process.env.SERVICE_ID;
 const moment = require("moment-timezone");
-const axios = require('axios');
+const axios = require('axios/index');
 const { CronJob } = require('cron');
 const {toSlackPost} = require("./utils/functions");
 
