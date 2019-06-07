@@ -4,11 +4,11 @@ const moment = require("moment-timezone");
 const format = `HH:mm dddd, DD MMMM YYYY`;
 
 function toSlackPost(post) {
-    const date = +`${post.content.time}000`;
+    const date = post.content.time ? moment(+`${post.content.time}000`).format(format) : 'No date available!';
 
     return [
         `*${post.restaurant}*`,
-        `Data postu: _${moment(date).format(format)}_`,
+        `Data postu: _${date}_`,
         `>${post.content.post}`
     ].join('\n')
 }

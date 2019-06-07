@@ -18,8 +18,12 @@ async function one(name, pageId) {
             }
         );
 
-        const header = lunchPost.previousElementSibling;
-        const time = header.querySelector('[data-utime]').getAttribute('data-utime');
+        let time;
+
+        if(lunchPost) {
+            const header = lunchPost.previousElementSibling;
+            time = header.querySelector('[data-utime]').getAttribute('data-utime');
+        }
 
         return {
             time,

@@ -10,6 +10,7 @@ const restaurants = require('./data/restaurants');
 
 const timezone = 'Europe/Warsaw';
 
+
 moment.tz.setDefault(timezone);
 
 async function getPosts() {
@@ -21,7 +22,6 @@ async function getPosts() {
 
 (async() => {
     const posts = await getPosts();
-    console.log(posts);
     await slack.sendMessage(posts);
 })();
 
