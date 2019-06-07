@@ -1,20 +1,13 @@
-const puppeteer = require("puppeteer");
+const { initBrowser } = require('../utils/pupetter');
 const moment = require("moment/moment");
 require("moment/locale/pl");
 
-const restaurant = 'Emalia';
+async function batchSmall(name, pageId) {
+    console.log(`Requesting ${name}...`);
+    const browser = await initBrowser();
 
-async function log() {
-    console.log(`Requesting ${restaurant}...`);
-
-    const browser = await puppeteer.launch({
-        'args' : [
-            '--no-sandbox',
-            '--disable-setuid-sandbox'
-        ]
-    });
     const page = await browser.newPage();
-    await page.goto("https://www.facebook.com/pg/Emaliazablocie/posts/");
+    await page.goto(`https://www.facebook.com/pg/${pageId}/posts/`);
     const currentDay = moment().format("dddd");
     const nextDay = moment().add(1, "day").format("dddd");
     const days = [1, 2, 3, 4, 5].map(day => moment().day(day).format('dddd').toLowerCase());
@@ -31,6 +24,7 @@ async function log() {
         }
 
         const nextDayIndex = post.textContent.toLowerCase().indexOf(nextDay);
+
         return {
             time,
             post: post.textContent.substring(
@@ -43,9 +37,9 @@ async function log() {
     await browser.close();
 
     return {
-        restaurant,
+        restaurant: name,
         content
     }
 }
 
-module.exports = {log};
+module.exports = batchSmall;
