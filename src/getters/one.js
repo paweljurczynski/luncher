@@ -1,42 +1,11 @@
-const { initBrowser } = require('../utils/pupetter');
+const facebook = require('../services/facebook');
+const {isLunchPost} = require("../utils/knowledge");
+const {isTodaysPost} = require("../utils/date");
 
-async function one(name, pageId) {
-    console.log(`Requesting ${name}...`);
+async function one(restaurant) {
+    const posts = await facebook.getPostsByPageId(restaurant.pageId);
 
-    const browser = await initBrowser();
-    const page = await browser.newPage();
-    await page.goto(`https://www.facebook.com/pg/${pageId}/posts/`);
-
-    const content = await page.evaluate(() => {
-        const lunchPost = Array.from(document.querySelectorAll('[data-testid="post_message"]')).find(
-            post => {
-                const header = post.previousElementSibling;
-                const time = header.querySelector('[data-utime]').getAttribute('data-utime');
-                const isLunchPost = ['zapraszamy', 'krem', 'makaron', 'zupa'].some(word => post.textContent.toLowerCase().includes(word));
-
-                return new Date(+`${time}000`).toDateString() === new Date().toDateString() && isLunchPost;
-            }
-        );
-
-        let time;
-
-        if(lunchPost) {
-            const header = lunchPost.previousElementSibling;
-            time = header.querySelector('[data-utime]').getAttribute('data-utime');
-        }
-
-        return {
-            time,
-            post: lunchPost && lunchPost.textContent || 'Food not found. Stay hungry!'
-        }
-    });
-
-    await browser.close();
-
-    return {
-        restaurant: name,
-        content
-    }
+    return posts.find(post => isTodaysPost(post) && isLunchPost(post));
 };
 
 module.exports = one;

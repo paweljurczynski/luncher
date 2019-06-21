@@ -1,7 +1,7 @@
 const one = require('./one');
-const batchSmall = require('./batch-small');
+const batch = require('./batch');
 
 module.exports = {
     one,
-    batchSmall
+    batch
 };

@@ -10,19 +10,21 @@ const restaurants = require('./data/restaurants');
 
 const timezone = 'Europe/Warsaw';
 
-
 moment.tz.setDefault(timezone);
 
 async function getPosts() {
-    return await Promise.all(restaurants.map(r => r.getter(r.name, r.pageId)));
+    return await Promise.all(restaurants.map(restaurant => {
+        console.log(`Requesting ${restaurant.emoji} ${restaurant.name}...`);
+        return restaurant.getter(restaurant);
+    }));
 }
-
-// new CronJob('30 11 * * 0-6', async () => {
-//     console.log('Cron running...');
 
 (async() => {
     const posts = await getPosts();
-    await slack.sendMessage(posts);
+
+    console.log(posts.filter(Boolean));
+
+    // await slack.sendMessage(posts);
 })();
 
 app.listen(port, () => console.log(`Luncher app listening on port ${port}!`));
