@@ -3,7 +3,7 @@ const moment = require("moment/moment");
 const weekDays = [1, 2, 3, 4, 5].map(day => moment().day(day).format('dddd').toLowerCase());
 
 const isTodaysPost = post => new Date(post.time).toDateString() === new Date().toDateString();
-const hasDayOffers = post => weekDays.some(day => post.content.includes(day));
+const hasDayOffers = post => weekDays.some(day => post.content.toLowerCase().includes(day));
 const getMealFromPost = post => {
     const content = post.content.toLowerCase();
     const today = moment().format('dddd');

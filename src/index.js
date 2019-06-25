@@ -13,18 +13,22 @@ const timezone = 'Europe/Warsaw';
 moment.tz.setDefault(timezone);
 
 async function getPosts() {
-    return await Promise.all(restaurants.map(restaurant => {
+    return await Promise.all(restaurants.map(async restaurant => {
         console.log(`Requesting ${restaurant.emoji} ${restaurant.name}...`);
-        return restaurant.getter(restaurant);
+        const post = await restaurant.getter(restaurant);
+
+        return {
+            restaurant: restaurant.name,
+            ...post
+        };
     }));
 }
 
 (async() => {
     const posts = await getPosts();
+    const slackPosts = posts.filter(Boolean);
 
-    console.log(posts.filter(Boolean));
-
-    // await slack.sendMessage(posts);
+    await slack.sendMessage(slackPosts);
 })();
 
 app.listen(port, () => console.log(`Luncher app listening on port ${port}!`));
