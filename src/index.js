@@ -18,7 +18,7 @@ async function getPosts() {
         const post = await restaurant.getter(restaurant);
 
         return {
-            restaurant: restaurant.name,
+            restaurant,
             ...post
         };
     }));
@@ -27,6 +27,8 @@ async function getPosts() {
 (async() => {
     const posts = await getPosts();
     const slackPosts = posts.filter(Boolean);
+
+    console.log(posts);
 
     await slack.sendMessage(slackPosts);
 })();

@@ -7,9 +7,11 @@ function toSlackPost(post) {
     const date = moment(post.time).format(format);
 
     return [
-        `*${post.restaurant}*`,
+        `*${post.restaurant.emoji} ${post.restaurant.name}*`,
         `Data postu: _${date}_`,
-        `>${post.content}`
+        `---------------------------------------------`,
+        `${post.content}`,
+        `---------------------------------------------`
     ].join('\n')
 }
 

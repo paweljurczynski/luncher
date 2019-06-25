@@ -10,9 +10,11 @@ async function getPostsByPageId(pageId) {
             const header = post.previousElementSibling;
             const time = header.querySelector('[data-utime]').getAttribute('data-utime');
 
+            [...post.querySelectorAll('.text_exposed_show')].forEach(el => el.classList.remove('text_exposed_show'));
+
             return {
                 time: new Date(+`${time}000`).getTime(),
-                content: post.textContent
+                content: post.innerText
             };
         })
     );
