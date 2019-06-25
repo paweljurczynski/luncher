@@ -5,13 +5,12 @@ const format = `HH:mm dddd, DD MMMM YYYY`;
 
 function toSlackPost(post) {
     const date = moment(post.time).format(format);
+    const content = post.content.split('\n').filter(line => line.trim()).join('\n>');
 
     return [
-        `*${post.restaurant.emoji} ${post.restaurant.name}*`,
+        `*${post.restaurant}*`,
         `Data postu: _${date}_`,
-        `---------------------------------------------`,
-        `${post.content}`,
-        `---------------------------------------------`
+        `>${content}`,
     ].join('\n')
 }
 

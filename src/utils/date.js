@@ -4,13 +4,13 @@ const weekDays = [1, 2, 3, 4, 5].map(day => moment().day(day).format('dddd').toL
 
 const isTodaysPost = post => new Date(post.time).toDateString() === new Date().toDateString();
 const hasDayOffers = post => weekDays.some(day => post.content.toLowerCase().includes(day));
-const getMealFromPost = post => {
+const getDayMenuFromPost = post => {
     const content = post.content.toLowerCase();
     const today = moment().format('dddd');
     const nextDay = moment().add(1, 'day').format('dddd');
     const nextDayIndex = content.includes(nextDay) ? content.indexOf(nextDay) : undefined;
 
-    return content.slice(
+    return post.content.slice(
         content.lastIndexOf(today),
         nextDayIndex
     );
@@ -19,5 +19,5 @@ const getMealFromPost = post => {
 module.exports = {
     isTodaysPost,
     hasDayOffers,
-    getMealFromPost
+    getDayMenuFromPost
 };

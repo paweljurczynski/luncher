@@ -1,14 +1,17 @@
 const facebook = require('../services/facebook');
-const {hasDayOffers, getMealFromPost} = require("../utils/date");
+const {hasDayOffers, getDayMenuFromPost } = require("../utils/date");
 
 async function batch(restaurant) {
     const posts = await facebook.getPostsByPageId(restaurant.pageId);
-    const post = posts.find(post => hasDayOffers(post));
+    const lunchPost = posts.find(post => hasDayOffers(post));
 
-    return {
-        ...post,
-        content: getMealFromPost(post)
-    };
+    if(lunchPost) {
+        return {
+            ...lunchPost,
+            content: getDayMenuFromPost(lunchPost),
+            restaurant: `${restaurant.emoji} ${restaurant.name}`
+        }
+    }
 }
 
 module.exports = batch;
