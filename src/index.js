@@ -6,6 +6,7 @@ const moment = require("moment-timezone");
 const slack = require('./services/slack');
 require("moment/locale/pl");
 const restaurants = require('./data/restaurants');
+const { retryable } = require("./utils/retryable");
 
 const timezone = 'Europe/Warsaw';
 
@@ -13,20 +14,23 @@ moment.tz.setDefault(timezone);
 
 function fetchRestaurant(restaurant) {
     console.log(`Requesting ${restaurant.emoji} ${restaurant.name}...`);
-    return restaurant.getter(restaurant);
+    return retryable(restaurant);
 }
 
-async function getPosts() {
-    const tasks = restaurants.map(fetchRestaurant);
-    const posts = await Promise.all(tasks);
+function getPosts() {
+    const tasks$ = restaurants.map(fetchRestaurant);
 
-    return posts.filter(Boolean);
+    return merge(...tasks$);
 }
 
-(async() => {
-    const posts = await getPosts();
 
-    await slack.sendMessage(posts);
-})();
+const posts$ = getPosts();
+
+posts$.subscribe(post => {
+    console.log(post);
+});
+
+// await slack.sendMessage(posts);
+
 
 app.listen(port, () => console.log(`Luncher app listening on port ${port}!`));

@@ -21,6 +21,7 @@
     "moment-timezone": "^0.5.25",
     "node-cron": "^2.0.3",
     "nodemon": "^1.19.1",
-    "puppeteer": "^1.15.0"
+    "puppeteer": "^1.15.0",
+    "rxjs": "^6.5.2"
   }
 }

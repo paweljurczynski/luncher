@@ -6,11 +6,13 @@ async function one(restaurant) {
     const posts = await facebook.getPostsByPageId(restaurant.pageId);
     const lunchPost = posts.find(post => isTodaysPost(post) && isLunchPost(post));
 
-    if(lunchPost) {
-        return {
-            ...lunchPost,
-            restaurant: `${restaurant.emoji} ${restaurant.name}`
-        }
+    if (!lunchPost) {
+        throw new Error(`Food for ${restaurant.name} has not been found!`);
+    }
+
+    return {
+        ...lunchPost,
+        restaurant: `${restaurant.emoji} ${restaurant.name}`
     }
 };
 
