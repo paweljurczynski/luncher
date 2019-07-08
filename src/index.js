@@ -3,7 +3,7 @@ require("moment/locale/pl");
 
 const express = require("express");
 const app = express();
-const port = process.env.OPENSHIFT_NODEJS_PORT || 80;
+const port = process.env.PORT || 80;
 const moment = require("moment-timezone");
 const slack = require("./services/slack");
 const restaurants = require("./data/restaurants");
