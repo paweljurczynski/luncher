@@ -14,10 +14,10 @@ function toSlackPost(post) {
     ].join('\n')
 }
 
-async function sendMessage(posts) {
+async function sendMessage(post) {
     console.log('Sending slack message...');
     const url = `https://hooks.slack.com/services/${serviceId}`;
-    const content = posts.map(toSlackPost).join(`\n\n`);
+    const content = toSlackPost(post);
 
     await axios.post(url, {text: content});
 }
