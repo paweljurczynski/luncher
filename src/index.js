@@ -22,15 +22,24 @@ function getPosts() {
   return merge(...tasks$);
 }
 
-new CronJob('40 18 * * 1-5', async () => {
-  console.log("We'are starting to be hungry!");
+new CronJob(
+  "40 18 * * 1-5",
+  async () => {
+    console.log("We'are starting to be hungry!");
 
-  const posts$ = getPosts();
+    const posts$ = getPosts();
 
-  posts$.subscribe(post => {
-    slack.sendMessage(post);
+    posts$.subscribe(post => {
+      slack.sendMessage(post);
+    });
+  },
+  null,
+  true,
+  timezone
+);
+
+app.get("/", function(req, res) {
+  res.send("I'm alive!");
 });
-
-}, null, true, timezone);
 
 app.listen(port, () => console.log(`Luncher app listening on port ${port}!`));
