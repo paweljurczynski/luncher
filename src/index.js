@@ -23,7 +23,7 @@ function getPosts() {
 }
 
 new CronJob(
-  "40 18 * * 1-5",
+  "15 08 * * 1-5",
   async () => {
     console.log("We'are starting to be hungry!");
 
